@@ -3,6 +3,7 @@ import { LOGIN, LOGIN_ERROR, LOGOUT } from "../utils/constants";
 const initialState = {
   isLoggedIn: false,
   userId: null,
+  currentUser: null,
   error: null,
 };
 
@@ -12,7 +13,7 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoggedIn: true,
-        userId: action.userId,
+        currentUser: action.user,
         error: null,
       };
     case LOGOUT:

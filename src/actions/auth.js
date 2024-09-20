@@ -1,8 +1,8 @@
 import { LOGIN, LOGIN_ERROR, LOGOUT } from "../utils/constants";
 
-export const login = (userId) => ({
+export const login = (user) => ({
   type: LOGIN,
-  userId,
+  user,
 });
 
 export const logout = () => ({

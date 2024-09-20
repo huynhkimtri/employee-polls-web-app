@@ -19,7 +19,7 @@ const Login = () => {
     console.log("🚀 ~ handleLogin ~ user:", user);
 
     if (user && user.password === password) {
-      dispatch(login(user.id));
+      dispatch(login(user));
       // Redirect to home or desired page after login
       naviagate("/");
     } else {
