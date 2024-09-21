@@ -48,7 +48,8 @@ const Login = () => {
         <h1 style={{ textAlign: "center" }}>Employee Polls</h1>
         {error && (
           <Alert
-            style={{ marginBottom: "10px" }}
+            showIcon
+            style={{ marginBottom: "20px" }}
             message={error}
             type="error"
           />
