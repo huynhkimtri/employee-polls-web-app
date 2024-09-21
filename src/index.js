@@ -7,13 +7,11 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { createStore } from "redux";
 import rootReducer from "./reducer";
 import { Provider } from "react-redux";
+import middleware from "./middleware";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-const store = createStore(
-  rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+const store = createStore(rootReducer, middleware);
 
 root.render(
   <React.StrictMode>
