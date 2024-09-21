@@ -1,10 +1,10 @@
 import { ADD_POLL, FETCH_POLLS, VOTE_POLL } from "../utils/constants";
 
 // Action to fetch polls
-export const fetchPolls = (polls) => {
+export const fetchPolls = (polls, currentUserId) => {
   return {
     type: FETCH_POLLS,
-    payload: polls,
+    payload: { polls, currentUserId },
   };
 };
 

@@ -1,29 +1,56 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Poll from "./Poll";
+import { useEffect, useState } from "react";
+import { fetchPolls } from "../actions/poll";
+import { _getQuestions } from "../utils/_DATA";
+import { Card, List, Row, Switch } from "antd";
 
 const Home = () => {
-  const { answeredPolls, unansweredPolls } = useSelector((state) => ({
-    currentUser: state.auth.currentUser,
-    answeredPolls: state.polls?.answered || [],
-    unansweredPolls: state.polls?.unanswered || [],
-  }));
+  const dispatch = useDispatch();
+  const [showAnswered, setShowAnswered] = useState(false);
+
+  const currentUser = useSelector((state) => state.auth.currentUser);
+  const answeredPolls = useSelector((state) => state.polls?.answered || []);
+  const unansweredPolls = useSelector((state) => state.polls?.unanswered || []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await _getQuestions();
+      const polls = Object.keys(data)
+        .map((k) => data[k])
+        .map((p) => {
+          return {
+            ...p,
+            currentUser,
+            answeredBy: [...p.optionOne.votes, ...p.optionTwo.votes],
+          };
+        });
+      dispatch(fetchPolls(polls, currentUser.id));
+    };
+
+    fetchData();
+  }, [currentUser, dispatch]);
 
   return (
-    <div>
-      <h1>Home page</h1>
-      <h2>Unanswered Polls</h2>
-      <div>
-        {unansweredPolls.map((poll) => (
-          <Poll key={poll.id} poll={poll} />
-        ))}
-      </div>
-      <h2>Answered Polls</h2>
-      <div>
-        {answeredPolls.map((poll) => (
-          <Poll key={poll.id} poll={poll} />
-        ))}
-      </div>
-    </div>
+    <Row>
+      <Card title="Polls">
+        <Switch
+          checkedChildren="Answered"
+          unCheckedChildren="Unanswered"
+          checked={showAnswered}
+          onChange={() => setShowAnswered(!showAnswered)}
+        />
+        <List
+          itemLayout="horizontal"
+          dataSource={showAnswered ? answeredPolls : unansweredPolls}
+          renderItem={(poll) => (
+            <List.Item>
+              <Poll key={poll.id} poll={poll} />
+            </List.Item>
+          )}
+        />
+      </Card>
+    </Row>
   );
 };
 

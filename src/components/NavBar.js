@@ -4,9 +4,7 @@ import { logout } from "../actions/auth";
 
 const NavBar = () => {
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state) => ({
-    currentUser: state.auth.currentUser,
-  }));
+  const currentUser = useSelector((state) => state.auth.currentUser);
 
   const handleLogout = () => {
     dispatch(logout());

@@ -10,11 +10,11 @@ const pollsReducer = (state = initialState, action) => {
     case FETCH_POLLS:
       return {
         ...state,
-        unanswered: action.payload.filter(
-          (poll) => !poll.answeredBy.includes(action.payload.currentUser.id)
+        unanswered: action.payload.polls.filter(
+          (poll) => !poll.answeredBy.includes(action.payload.currentUserId)
         ),
-        answered: action.payload.filter((poll) =>
-          poll.answeredBy.includes(action.payload.currentUser.id)
+        answered: action.payload.polls.filter((poll) =>
+          poll.answeredBy.includes(action.payload.currentUserId)
         ),
       };
     case ADD_POLL:
