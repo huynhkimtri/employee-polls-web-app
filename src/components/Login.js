@@ -3,7 +3,7 @@ import { login, loginError } from "../actions/auth";
 import { useEffect, useState } from "react";
 import { _getUsers } from "../utils/_DATA";
 import { useNavigate } from "react-router-dom";
-import { Alert, Button, Checkbox, Form, Input } from "antd";
+import { Alert, Button, Checkbox, Form, Input, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 const Login = () => {
@@ -12,6 +12,7 @@ const Login = () => {
   const [password, setPassword] = useState("admin");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
   let naviagate = useNavigate();
 
   const handleLogin = async (values) => {
@@ -39,6 +40,7 @@ const Login = () => {
 
   return (
     <div className="login-container">
+      {contextHolder}
       <Form
         name="login"
         className="login-form"
@@ -81,7 +83,15 @@ const Login = () => {
           <Form.Item name="remember" valuePropName="checked" noStyle>
             <Checkbox>Remember me</Checkbox>
           </Form.Item>
-          <a className="login-form-forgot" href="/">
+          <a
+            className="login-form-forgot"
+            href="###"
+            onClick={() =>
+              messageApi.info(
+                "Hello, this function is currently under development!"
+              )
+            }
+          >
             Forgot password
           </a>
         </Form.Item>
