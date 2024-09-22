@@ -38,6 +38,9 @@ const NavBar = () => {
         alignItems: "center",
       }}
     >
+      <div className="logo">
+        <h2>Employee Polls</h2>
+      </div>
       <Menu
         theme="dark"
         mode="horizontal"
@@ -45,7 +48,7 @@ const NavBar = () => {
         items={items}
         style={{ flex: 1, minWidth: 0 }}
       />
-      <div className="logo">
+      <div>
         <span
           style={{
             color: "#fff",

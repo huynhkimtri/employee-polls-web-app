@@ -37,6 +37,15 @@
   }
 }
 
+.layout {
+  min-height: 100vh;
+}
+
+.logo {
+  color: #fff;
+  margin: 16px 24px 16px 0;
+}
+
 .login-container {
   max-width: 300px;
   margin: 100px auto;

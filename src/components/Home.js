@@ -1,9 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import Poll from "./Poll";
 import { useEffect, useState } from "react";
 import { fetchPolls } from "../actions/poll";
 import { _getQuestions } from "../utils/_DATA";
-import { Avatar, Button, Card, List, Row, Switch, Tooltip } from "antd";
+import { Avatar, Button, List, Switch, Tooltip } from "antd";
 import { formatDate } from "../utils/helper";
 import { Link } from "react-router-dom";
 

@@ -1,4 +1,4 @@
-import { Avatar, List, Table } from "antd";
+import { Avatar, Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { _getUsers } from "../utils/_DATA";
 import { useEffect } from "react";
