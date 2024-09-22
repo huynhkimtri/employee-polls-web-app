@@ -1,28 +1,29 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addPoll } from "../actions/poll";
 import { Button, Form, Input, message } from "antd";
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { _saveQuestion } from "../utils/_DATA";
+import { useNavigate } from "react-router-dom";
 
 const PollForm = () => {
+  let naviagate = useNavigate();
   const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.auth.currentUser);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     setLoading(true);
     try {
       const newPoll = {
-        id: uuidv4(),
-        question: values.question,
-        optionA: values.optionA,
-        optionB: values.optionB,
-        votesA: 0,
-        votesB: 0,
+        optionOneText: values.optionOne,
+        optionTwoText: values.optionTwo,
+        author: currentUser.id,
       };
-      dispatch(addPoll(newPoll));
+      const data = await _saveQuestion(newPoll);
+      dispatch(addPoll(data));
       message.success("Poll created successfully!");
-      form.resetFields();
+      naviagate("/");
     } catch (error) {
       message.error("Failed to create poll. Please try again.");
     } finally {
@@ -31,27 +32,26 @@ const PollForm = () => {
   };
 
   return (
-    <Form form={form} layout="vertical" onFinish={handleSubmit}>
+    <Form
+      form={form}
+      layout="vertical"
+      onFinish={handleSubmit}
+      style={{ padding: " 20px" }}
+    >
+      <h2>Would you rather...</h2>
       <Form.Item
-        name="question"
-        label="Poll Question"
-        rules={[{ required: true, message: "Please enter the poll question" }]}
+        name="optionOne"
+        label="Option 1"
+        rules={[{ required: true, message: "Please enter option 1" }]}
       >
-        <Input placeholder="Would you rather..." />
+        <Input placeholder="Option 1" />
       </Form.Item>
       <Form.Item
-        name="optionA"
-        label="Option A"
-        rules={[{ required: true, message: "Please enter option A" }]}
+        name="optionTwo"
+        label="Option 2"
+        rules={[{ required: true, message: "Please enter option 2" }]}
       >
-        <Input placeholder="Option A" />
-      </Form.Item>
-      <Form.Item
-        name="optionB"
-        label="Option B"
-        rules={[{ required: true, message: "Please enter option B" }]}
-      >
-        <Input placeholder="Option B" />
+        <Input placeholder="Option 2" />
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit" loading={loading}>
