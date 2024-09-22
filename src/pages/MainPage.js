@@ -1,6 +1,6 @@
 import { Content } from "antd/es/layout/layout";
 import NavBar from "../components/NavBar";
-import { Layout, theme } from "antd";
+import { Col, Layout, Row, theme } from "antd";
 import { Outlet } from "react-router-dom";
 
 const MainPage = () => {
@@ -14,16 +14,19 @@ const MainPage = () => {
       <Content
         style={{ padding: "0 48px", marginTop: "16px", marginBottom: "48px" }}
       >
-        <div
-          style={{
-            background: colorBgContainer,
-            minHeight: 380,
-            padding: 24,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          <Outlet />
-        </div>
+        <Row justify={"center"}>
+          <Col
+            span={18}
+            style={{
+              background: colorBgContainer,
+              minHeight: 380,
+              padding: 24,
+              borderRadius: borderRadiusLG,
+            }}
+          >
+            <Outlet />
+          </Col>
+        </Row>
       </Content>
     </Layout>
   );
