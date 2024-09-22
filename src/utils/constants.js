@@ -7,6 +7,8 @@ export const LOGIN_ERROR = "LOGIN_ERROR";
 export const FETCH_POLLS = "FETCH_POLLS";
 export const ADD_POLL = "ADD_POLL";
 export const VOTE_POLL = "VOTE_POLL";
+export const OPT_ONE = "OPT_ONE";
+export const OPT_TWO = "OPT_TWO";
 
 // For Users
 export const ADD_USER = "ADD_USER";
