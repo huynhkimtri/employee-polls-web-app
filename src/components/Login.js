@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { login, loginError } from "../actions/auth";
 import { useEffect, useState } from "react";
-import { _getUsers } from "../utils/_DATA";
+import { loginWithUsernamePassword } from "../utils/API";
 import { useNavigate } from "react-router-dom";
 import { Alert, Button, Checkbox, Form, Input, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
@@ -18,12 +18,12 @@ const Login = () => {
   const handleLogin = async (values) => {
     setLoading(true);
     setError(null);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const users = await _getUsers();
-    const user = users[values.username];
-
-    if (user && user.password === values.password) {
-      dispatch(login(Object.assign({}, user, { password: null })));
+    const user = await loginWithUsernamePassword(
+      values.username,
+      values.password
+    );
+    if (user) {
+      dispatch(login(user));
       // Redirect to home or desired page after login
       naviagate("/");
     } else {
