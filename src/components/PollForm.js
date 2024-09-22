@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { addPoll } from "../actions/poll";
-import { Button, Form, Input, message } from "antd";
+import { Button, Col, Form, Input, message, Row } from "antd";
 import { useState } from "react";
 import { _saveQuestion } from "../utils/_DATA";
 import { useNavigate } from "react-router-dom";
@@ -32,33 +32,40 @@ const PollForm = () => {
   };
 
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      onFinish={handleSubmit}
-      style={{ padding: " 20px" }}
-    >
-      <h2>Would you rather...</h2>
-      <Form.Item
-        name="optionOne"
-        label="Option 1"
-        rules={[{ required: true, message: "Please enter option 1" }]}
-      >
-        <Input placeholder="Option 1" />
-      </Form.Item>
-      <Form.Item
-        name="optionTwo"
-        label="Option 2"
-        rules={[{ required: true, message: "Please enter option 2" }]}
-      >
-        <Input placeholder="Option 2" />
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          Create Poll
-        </Button>
-      </Form.Item>
-    </Form>
+    <Row justify={"center"}>
+      <Col span={12}>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+          style={{ padding: " 20px" }}
+        >
+          <div style={{ textAlign: "center" }}>
+            <h2>Would you rather...</h2>
+            <p>Create Your Own Poll</p>
+          </div>
+          <Form.Item
+            name="optionOne"
+            label="First Option"
+            rules={[{ required: true, message: "Please enter option 1" }]}
+          >
+            <Input placeholder="Option 1" />
+          </Form.Item>
+          <Form.Item
+            name="optionTwo"
+            label="Second Option"
+            rules={[{ required: true, message: "Please enter option 2" }]}
+          >
+            <Input placeholder="Option 2" />
+          </Form.Item>
+          <Form.Item style={{ alignItems: "center" }}>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              Create Poll
+            </Button>
+          </Form.Item>
+        </Form>
+      </Col>
+    </Row>
   );
 };
 
