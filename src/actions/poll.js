@@ -17,9 +17,9 @@ export const addPoll = (poll) => {
 };
 
 // Action to vote on a poll
-export const votePoll = (pollId, selectedOption) => {
+export const votePoll = (pollId, selectedOption, userId) => {
   return {
     type: VOTE_POLL,
-    payload: { pollId, selectedOption },
+    payload: { pollId, selectedOption, userId },
   };
 };
