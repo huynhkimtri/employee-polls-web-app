@@ -23,7 +23,7 @@ const Login = () => {
     const user = users[values.username];
 
     if (user && user.password === values.password) {
-      dispatch(login(user));
+      dispatch(login(Object.assign({}, user, { password: null })));
       // Redirect to home or desired page after login
       naviagate("/");
     } else {
