@@ -10,6 +10,7 @@ const pollsReducer = (state = initialState, action) => {
     case FETCH_POLLS:
       return {
         ...state,
+        polls: action.payload.polls,
         unanswered: action.payload.polls.filter(
           (poll) => !poll.answeredBy.includes(action.payload.currentUserId)
         ),
