@@ -1,4 +1,4 @@
-import { Avatar, List } from "antd";
+import { Avatar, List, Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { _getUsers } from "../utils/_DATA";
 import { useEffect } from "react";
@@ -26,25 +26,63 @@ const Leaderboard = () => {
     fetchUsers();
   }, [dispatch]);
 
-  return (
-    <List
-      style={{ padding: "10px" }}
-      itemLayout="horizontal"
-      dataSource={users}
-      renderItem={(user) => (
-        <List.Item key={user.id}>
-          <List.Item.Meta
-            avatar={<Avatar src={user.avatarURL} />}
-            title={user.name}
-            description={`Questions asked: ${
-              user.questions.length
-            }, Questions answered: ${Object.keys(user.answers).length}`}
+  const columns = [
+    {
+      title: "User",
+      dataIndex: "name",
+      key: "name",
+      render: (text, record) => (
+        <span style={{ display: "flex", alignItems: "center" }}>
+          <Avatar
+            src={record.avatarURL}
+            style={{ backgroundColor: "#1677ff" }}
           />
-          <div>
-            Total: {user.questions.length + Object.keys(user.answers).length}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              marginLeft: "8px",
+            }}
+          >
+            <span>
+              <b>{text}</b>
+            </span>
+            <span>@{record.id}</span>
           </div>
-        </List.Item>
-      )}
+        </span>
+      ),
+    },
+    {
+      title: "Questions Asked",
+      dataIndex: "pollsCreated",
+      key: "pollsCreated",
+      render: (text, record) => <span>{record.questions.length}</span>,
+    },
+    {
+      title: "Questions Answered",
+      key: "pollsAnswered",
+      render: (text, record) => (
+        <span>{Object.keys(record.answers).length}</span>
+      ),
+    },
+    {
+      title: "Total",
+      key: "total",
+      render: (text, record) => (
+        <span>
+          {record.questions.length + Object.keys(record.answers).length}
+        </span>
+      ),
+    },
+  ];
+
+  return (
+    <Table
+      columns={columns}
+      dataSource={users}
+      rowKey="id"
+      pagination={false}
     />
   );
 };

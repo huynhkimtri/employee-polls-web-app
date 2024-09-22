@@ -57,6 +57,7 @@ const Home = () => {
               avatar={
                 <Avatar
                   src={`https://api.dicebear.com/7.x/miniavs/svg?seed=1`}
+                  style={{ backgroundColor: "#1677ff" }}
                 />
               }
               title={`Would you rather ${poll.optionOne.text} vs ${poll.optionTwo.text}`}
