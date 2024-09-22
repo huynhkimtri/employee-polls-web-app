@@ -3,7 +3,9 @@ import Poll from "./Poll";
 import { useEffect, useState } from "react";
 import { fetchPolls } from "../actions/poll";
 import { _getQuestions } from "../utils/_DATA";
-import { Card, List, Row, Switch } from "antd";
+import { Avatar, Button, Card, List, Row, Switch, Tooltip } from "antd";
+import { formatDate } from "../utils/helper";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -33,25 +35,42 @@ const Home = () => {
   }, [currentUser, dispatch]);
 
   return (
-    <Row>
-      <Card title="Polls">
+    <div>
+      <Tooltip
+        title="Toggle between your answered and unanswered polls"
+        placement="right"
+      >
         <Switch
           checkedChildren="Answered"
           unCheckedChildren="Unanswered"
           checked={showAnswered}
           onChange={() => setShowAnswered(!showAnswered)}
+          style={{ marginBottom: "10px" }}
         />
-        <List
-          itemLayout="horizontal"
-          dataSource={showAnswered ? answeredPolls : unansweredPolls}
-          renderItem={(poll) => (
-            <List.Item>
-              <Poll key={poll.id} poll={poll} />
-            </List.Item>
-          )}
-        />
-      </Card>
-    </Row>
+      </Tooltip>
+      <List
+        itemLayout="horizontal"
+        dataSource={showAnswered ? answeredPolls : unansweredPolls}
+        renderItem={(poll) => (
+          <List.Item>
+            <List.Item.Meta
+              avatar={
+                <Avatar
+                  src={`https://api.dicebear.com/7.x/miniavs/svg?seed=1`}
+                />
+              }
+              title={`Would you rather ${poll.optionOne.text} vs ${poll.optionTwo.text}`}
+              description={`@${poll.author} creates on ${formatDate(
+                poll.timestamp
+              )}`}
+            />
+            <Button type="default">
+              <Link to={`/questions/${poll.id}`}>Show more</Link>
+            </Button>
+          </List.Item>
+        )}
+      />
+    </div>
   );
 };
 
