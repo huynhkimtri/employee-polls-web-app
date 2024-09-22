@@ -1,29 +1,29 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { votePoll } from "../actions/poll";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Card, message } from "antd";
 
 const PollDetail = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const [poll, setPoll] = useState({});
   const [loading, setLoading] = useState(false);
-  console.log("🚀 ~ PollDetail ~ id:", id);
+  const polls = useSelector((state) => state.polls?.polls || []);
+  const currentUser = useSelector((state) => state.auth.currentUser);
 
-  const poll = {
-    question: "this is a sample question",
-    id: "xj352vofupe1dqz9emx13r",
-    author: "mtsamis",
-    timestamp: 1493579767190,
-    optionA: {
-      votes: ["mtsamis", "zoshikanlu"],
-      text: "deploy to production once every two weeks",
-    },
-    optionB: {
-      votes: ["tylermcginnis"],
-      text: "deploy to production once every month",
-    },
-  };
+  useEffect(() => {
+    const fetchPollDetail = async () => {
+      const poll = polls.find((p) => p.id === id);
+      if (poll) {
+        setPoll(poll);
+      } else {
+        message.error("Failed to load poll. Please try again.");
+      }
+    };
+
+    fetchPollDetail();
+  }, [id, polls]);
 
   const handleVote = (pollId, selectedOption) => {
     setLoading(true);
@@ -36,15 +36,16 @@ const PollDetail = () => {
       setLoading(false);
     }
   };
+
   return (
-    <Card title={poll.question}>
+    <Card title="Would You Rather">
       <Button
         type="primary"
         onClick={() => handleVote("A")}
         loading={loading}
         disabled={loading}
       >
-        {poll.optionA}
+        {poll.optionOne?.text}
       </Button>
       <Button
         type="primary"
@@ -53,7 +54,7 @@ const PollDetail = () => {
         disabled={loading}
         style={{ marginLeft: "10px" }}
       >
-        {poll.optionB}
+        {poll.optionTwo?.text}
       </Button>
     </Card>
   );
