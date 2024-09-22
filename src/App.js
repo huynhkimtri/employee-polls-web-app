@@ -6,16 +6,19 @@ import Leaderboard from "./components/Leaderboard";
 import PollForm from "./components/PollForm";
 import PollDetail from "./components/PollDetail";
 import Login from "./components/Login";
+import Home from "./components/Home";
 
 function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route element={<PrivateRoute />}>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route path="/add" element={<PollForm />} />
-        <Route path="/questions/:id" element={<PollDetail />} />
+      <Route path="/" element={<PrivateRoute />}>
+        <Route element={<MainPage />}>
+          <Route index element={<Home />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/add" element={<PollForm />} />
+          <Route path="/questions/:id" element={<PollDetail />} />
+        </Route>
       </Route>
     </Routes>
   );

@@ -1,7 +1,7 @@
 import { Content } from "antd/es/layout/layout";
-import Home from "../components/Home";
 import NavBar from "../components/NavBar";
 import { Layout, theme } from "antd";
+import { Outlet } from "react-router-dom";
 
 const MainPage = () => {
   const {
@@ -11,7 +11,9 @@ const MainPage = () => {
   return (
     <Layout>
       <NavBar />
-      <Content style={{ padding: "0 48px", marginTop: "16px" }}>
+      <Content
+        style={{ padding: "0 48px", marginTop: "16px", marginBottom: "48px" }}
+      >
         <div
           style={{
             background: colorBgContainer,
@@ -20,7 +22,7 @@ const MainPage = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          <Home />
+          <Outlet />
         </div>
       </Content>
     </Layout>
