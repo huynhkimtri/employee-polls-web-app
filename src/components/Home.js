@@ -17,14 +17,15 @@ const Home = () => {
     const fetchData = async () => {
       const data = await _getQuestions();
       const polls = Object.keys(data)
-        .map((k) => data[k])
-        .map((p) => {
+        .map((k) => {
+          const p = data[k];
           return {
             ...p,
             currentUser,
             answeredBy: [...p.optionOne.votes, ...p.optionTwo.votes],
           };
-        });
+        })
+        .sort((a, b) => b.timestamp - a.timestamp);
       dispatch(fetchPolls(polls, currentUser.id));
     };
 
