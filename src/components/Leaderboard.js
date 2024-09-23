@@ -1,32 +1,7 @@
 import { Avatar, Table } from "antd";
-import { connect, useDispatch, useSelector } from "react-redux";
-import { _getUsers } from "../utils/_DATA";
-import { useEffect } from "react";
-import { receiveUsers } from "../actions/user";
+import { connect } from "react-redux";
 
 const Leaderboard = (props) => {
-  console.log(props);
-  // const dispatch = useDispatch();
-  // const users = useSelector((state) => state.users.users);
-
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     const data = await _getUsers();
-  //     const users = Object.keys(data)
-  //       .map((userId) => Object.assign({}, data[userId], { password: null }))
-  //       .sort((userA, userB) => {
-  //         // sort users by number of questions asked, and number of questions answered
-  //         return (
-  //           userB.questions.length +
-  //           Object.keys(userB.answers).length -
-  //           (userA.questions.length + Object.keys(userA.answers).length)
-  //         );
-  //       });
-  //     dispatch(receiveUsers(users));
-  //   };
-  //   fetchUsers();
-  // }, [dispatch]);
-
   const columns = [
     {
       title: "User",
@@ -88,6 +63,17 @@ const Leaderboard = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({ users: state.users.users || [] });
+const mapStateToProps = (state) => ({
+  users: Object.keys(state.users.users || {})
+    .map((userId) => state.users.users[userId])
+    .sort((userA, userB) => {
+      // sort users by number of questions asked, and number of questions answered
+      return (
+        userB.questions.length +
+        Object.keys(userB.answers).length -
+        (userA.questions.length + Object.keys(userA.answers).length)
+      );
+    }),
+});
 
 export default connect(mapStateToProps)(Leaderboard);

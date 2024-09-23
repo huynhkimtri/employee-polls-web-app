@@ -4,57 +4,58 @@ import { votePoll } from "../actions/poll";
 import { useEffect, useState } from "react";
 import { Button, Card, message } from "antd";
 import { OPT_ONE, OPT_TWO } from "../utils/constants";
+import { formatPercentVoteOption } from "../utils/helper";
 
 const PollDetail = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [poll, setPoll] = useState({});
   const [loading, setLoading] = useState(false);
-  const answeredPolls = useSelector((state) => state.polls?.answered || []);
-  const unansweredPolls = useSelector((state) => state.polls?.unanswered || []);
   const currentUser = useSelector((state) => state.auth.currentUser);
+  const polls = useSelector((state) => state.polls.polls);
 
   useEffect(() => {
     const fetchPollDetail = async () => {
-      const polls = [...answeredPolls, ...unansweredPolls];
-      const poll = polls.find((p) => p.id === id);
+      const poll = polls[id];
+      console.log("🚀 ~ fetchPollDetail ~ poll:", poll);
       if (poll) {
-        const voteOptionOne = poll.optionOne.votes.length || 0;
-        const voteOptionTwo = poll.optionTwo.votes.length || 0;
-
-        const totalVotes = voteOptionOne + voteOptionTwo;
-        const percentageOptionOne = totalVotes
-          ? (voteOptionOne / totalVotes) * 100
-          : 0;
-        const percentageOptionTwo = totalVotes
-          ? (voteOptionTwo / totalVotes) * 100
-          : 0;
         const userVote = poll.optionOne.votes.includes(currentUser.id)
           ? OPT_ONE
           : poll.optionTwo.votes.includes(currentUser.id)
           ? OPT_TWO
           : undefined;
 
-        setPoll({
-          ...poll,
-          percentageOptionOne,
-          percentageOptionTwo,
-          userVote,
-        });
+        // if current voted -> show the info
+        if (userVote) {
+          console.log("🚀 ~ fetchPollDetail ~ userVote:", userVote);
+          const { percentageOptionOne, percentageOptionTwo } =
+            formatPercentVoteOption(poll);
+
+          setPoll({
+            ...poll,
+            percentageOptionOne,
+            percentageOptionTwo,
+            userVote,
+          });
+        } else {
+          setPoll(poll);
+        }
       } else {
         message.error("Failed to load poll. Please try again.");
       }
     };
 
     fetchPollDetail();
-  }, [answeredPolls, currentUser.id, id, unansweredPolls]);
+  }, [currentUser.id, id, polls]);
 
   const handleVote = (selectedOption) => {
     setLoading(true);
     try {
+      setPoll({ ...poll, userVote: selectedOption });
       dispatch(votePoll(id, selectedOption, currentUser.id));
       message.success("Vote submitted successfully!");
     } catch (error) {
+      console.log("🚀 ~ handleVote ~ error:", error);
       message.error("Failed to submit vote. Please try again.");
     } finally {
       setLoading(false);
@@ -72,10 +73,12 @@ const PollDetail = () => {
         {poll.optionOne?.text}
       </Button>
       <div>
-        <p>
-          {poll.optionOne?.votes.join(", ")} votes (
-          {poll.percentageOptionOne?.toFixed(2)}%)
-        </p>
+        {poll.userVote && (
+          <p>
+            {poll.optionOne?.votes.join(", ")} votes (
+            {formatPercentVoteOption(poll).percentageOptionOne?.toFixed(2)}%)
+          </p>
+        )}
       </div>
       <Button
         type={poll.userVote === OPT_TWO ? "primary" : "default"}
@@ -87,10 +90,12 @@ const PollDetail = () => {
         {poll.optionTwo?.text}
       </Button>
       <div>
-        <p>
-          {poll.optionTwo?.votes.join(", ")} votes (
-          {poll.percentageOptionTwo?.toFixed(2)}%)
-        </p>
+        {poll.userVote && (
+          <p>
+            {poll.optionTwo?.votes.join(", ")} votes (
+            {formatPercentVoteOption(poll).percentageOptionTwo?.toFixed(2)}%)
+          </p>
+        )}
       </div>
     </Card>
   );

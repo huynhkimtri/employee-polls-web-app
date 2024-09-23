@@ -3,9 +3,9 @@ import { fetchPolls } from "./poll";
 import { receiveUsers } from "./user";
 
 export const handleInitialData = (currentUserId) => {
-    return async (dispatch) => {
-        const { polls, users } = await getInitData();
-        dispatch(fetchPolls(polls, currentUserId));
-        dispatch(receiveUsers(users));
-    };
-}
+  return async (dispatch) => {
+    const { questions, users } = await getInitData();
+    dispatch(fetchPolls(questions, currentUserId));
+    dispatch(receiveUsers(users));
+  };
+};

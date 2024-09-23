@@ -1,38 +1,23 @@
-import { connect, useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { fetchPolls } from "../actions/poll";
-import { _getQuestions } from "../utils/_DATA";
+import { connect } from "react-redux";
+import { useState } from "react";
 import { Avatar, Button, List, Switch, Tooltip } from "antd";
 import { formatDate } from "../utils/helper";
 import { Link } from "react-router-dom";
 
 const Home = (props) => {
-  const dispatch = useDispatch();
   const [showAnswered, setShowAnswered] = useState(false);
-  console.log(props);
+  const unansweredPolls = props.polls.filter(
+    (poll) =>
+      ![...poll.optionOne.votes, ...poll.optionTwo.votes].includes(
+        props.curentUserId
+      )
+  );
 
-  const currentUser = useSelector((state) => state.auth.currentUser);
-  const answeredPolls = useSelector((state) => state.polls?.answered || []);
-  const unansweredPolls = useSelector((state) => state.polls?.unanswered || []);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const data = await _getQuestions();
-  //     const polls = Object.keys(data)
-  //       .map((k) => {
-  //         const p = data[k];
-  //         return {
-  //           ...p,
-  //           currentUser,
-  //           answeredBy: [...p.optionOne.votes, ...p.optionTwo.votes],
-  //         };
-  //       })
-  //       .sort((a, b) => b.timestamp - a.timestamp);
-  //     dispatch(fetchPolls(polls, currentUser.id));
-  //   };
-
-  //   fetchData();
-  // }, [currentUser, dispatch]);
+  const answeredPolls = props.polls.filter((poll) =>
+    [...poll.optionOne.votes, ...poll.optionTwo.votes].includes(
+      props.curentUserId
+    )
+  );
 
   return (
     <div>
@@ -50,7 +35,7 @@ const Home = (props) => {
       </Tooltip>
       <List
         itemLayout="horizontal"
-        dataSource={showAnswered ? props.polls.answeredPolls : props.polls.unansweredPolls}
+        dataSource={showAnswered ? answeredPolls : unansweredPolls}
         renderItem={(poll) => (
           <List.Item>
             <List.Item.Meta
@@ -76,7 +61,10 @@ const Home = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  polls: state.polls.polls
+  polls: Object.keys(state.polls.polls || {})
+    .map((qId) => state.polls.polls[qId])
+    .sort((a, b) => b.timestamp - a.timestamp),
+  curentUserId: state.auth.currentUser.id,
 });
 
 export default connect(mapStateToProps)(Home);

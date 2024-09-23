@@ -4,18 +4,11 @@ export const getInitData = async () => {
   const questions = await _getQuestions();
   const users = await _getUsers();
   return {
-    polls: Object.keys(questions).map((qId) => questions[qId]).map((p) => {
-      return { ...p, answeredBy: [...p.optionOne.votes, ...p.optionTwo.votes] }
-    }).sort((a, b) => b.timestamp - a.timestamp),
-    users: Object.keys(users).map((userId) => users[userId]).map(({ password, ...rest }) => rest),
+    questions,
+    users: Object.keys(users).map((userId) =>
+      Object.assign({}, users[userId], { passsword: null })
+    ),
   };
-  // const [questions, users] = await Promise.all([_getQuestions, _getUsers]);
-  // console.log(questions);
-  // console.log(users);
-  // return {
-  //   questions: Object.keys(questions).map((qId) => questions[qId]),
-  //   users: Object.keys(users).map((userId) => users[userId]).map(({ password, ...rest }) => rest),
-  // };
 };
 
 export const saveQuestion = async (question) => _saveQuestion(question);

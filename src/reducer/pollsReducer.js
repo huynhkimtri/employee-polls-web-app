@@ -17,12 +17,6 @@ const pollsReducer = (state = initialState, action) => {
       return {
         ...state,
         polls: action.payload.polls,
-        unanswered: action.payload.polls.filter(
-          (poll) => !poll.answeredBy.includes(action.payload.currentUserId)
-        ),
-        answered: action.payload.polls.filter((poll) =>
-          poll.answeredBy.includes(action.payload.currentUserId)
-        ),
       };
     case ADD_POLL:
       const { author } = action.poll;
@@ -36,22 +30,15 @@ const pollsReducer = (state = initialState, action) => {
       };
     case VOTE_POLL:
       const { pollId, selectedOption, userId } = action.payload;
-      const updatedUnanswered = state.unanswered.filter(
-        (poll) => poll.id !== pollId
-      );
-      const votedPoll = state.unanswered.find((poll) => poll.id === pollId);
+      const votedPoll = state.polls[pollId];
       if (selectedOption === OPT_ONE) {
         votedPoll.optionOne.votes.push(userId);
       }
       if (selectedOption === OPT_TWO) {
         votedPoll.optionTwo.votes.push(userId);
       }
-      // Assuming answeredBy is an array of user IDs
-      votedPoll.answeredBy.push(userId);
       return {
         ...state,
-        unanswered: updatedUnanswered,
-        answered: [votedPoll, ...state.answered],
       };
     default:
       return state;
