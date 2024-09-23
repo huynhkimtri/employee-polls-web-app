@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { fetchPolls } from "../actions/poll";
 import { _getQuestions } from "../utils/_DATA";
@@ -6,32 +6,33 @@ import { Avatar, Button, List, Switch, Tooltip } from "antd";
 import { formatDate } from "../utils/helper";
 import { Link } from "react-router-dom";
 
-const Home = () => {
+const Home = (props) => {
   const dispatch = useDispatch();
   const [showAnswered, setShowAnswered] = useState(false);
+  console.log(props);
 
   const currentUser = useSelector((state) => state.auth.currentUser);
   const answeredPolls = useSelector((state) => state.polls?.answered || []);
   const unansweredPolls = useSelector((state) => state.polls?.unanswered || []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await _getQuestions();
-      const polls = Object.keys(data)
-        .map((k) => {
-          const p = data[k];
-          return {
-            ...p,
-            currentUser,
-            answeredBy: [...p.optionOne.votes, ...p.optionTwo.votes],
-          };
-        })
-        .sort((a, b) => b.timestamp - a.timestamp);
-      dispatch(fetchPolls(polls, currentUser.id));
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const data = await _getQuestions();
+  //     const polls = Object.keys(data)
+  //       .map((k) => {
+  //         const p = data[k];
+  //         return {
+  //           ...p,
+  //           currentUser,
+  //           answeredBy: [...p.optionOne.votes, ...p.optionTwo.votes],
+  //         };
+  //       })
+  //       .sort((a, b) => b.timestamp - a.timestamp);
+  //     dispatch(fetchPolls(polls, currentUser.id));
+  //   };
 
-    fetchData();
-  }, [currentUser, dispatch]);
+  //   fetchData();
+  // }, [currentUser, dispatch]);
 
   return (
     <div>
@@ -49,7 +50,7 @@ const Home = () => {
       </Tooltip>
       <List
         itemLayout="horizontal"
-        dataSource={showAnswered ? answeredPolls : unansweredPolls}
+        dataSource={showAnswered ? props.polls.answeredPolls : props.polls.unansweredPolls}
         renderItem={(poll) => (
           <List.Item>
             <List.Item.Meta
@@ -74,4 +75,8 @@ const Home = () => {
   );
 };
 
-export default Home;
+const mapStateToProps = (state) => ({
+  polls: state.polls.polls
+});
+
+export default connect(mapStateToProps)(Home);

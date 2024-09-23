@@ -25,9 +25,14 @@ const pollsReducer = (state = initialState, action) => {
         ),
       };
     case ADD_POLL:
+      const { author } = action.poll;
       return {
         ...state,
         unanswered: [action.payload, ...state.unanswered],
+        [author]: {
+          ...state[author],
+          pollsCreated: state[author].pollsCreated + 1,
+        },
       };
     case VOTE_POLL:
       const { pollId, selectedOption, userId } = action.payload;

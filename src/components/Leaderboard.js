@@ -1,30 +1,31 @@
 import { Avatar, Table } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { _getUsers } from "../utils/_DATA";
 import { useEffect } from "react";
 import { receiveUsers } from "../actions/user";
 
-const Leaderboard = () => {
-  const dispatch = useDispatch();
-  const users = useSelector((state) => state.users.users);
+const Leaderboard = (props) => {
+  console.log(props);
+  // const dispatch = useDispatch();
+  // const users = useSelector((state) => state.users.users);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const data = await _getUsers();
-      const users = Object.keys(data)
-        .map((userId) => Object.assign({}, data[userId], { password: null }))
-        .sort((userA, userB) => {
-          // sort users by number of questions asked, and number of questions answered
-          return (
-            userB.questions.length +
-            Object.keys(userB.answers).length -
-            (userA.questions.length + Object.keys(userA.answers).length)
-          );
-        });
-      dispatch(receiveUsers(users));
-    };
-    fetchUsers();
-  }, [dispatch]);
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     const data = await _getUsers();
+  //     const users = Object.keys(data)
+  //       .map((userId) => Object.assign({}, data[userId], { password: null }))
+  //       .sort((userA, userB) => {
+  //         // sort users by number of questions asked, and number of questions answered
+  //         return (
+  //           userB.questions.length +
+  //           Object.keys(userB.answers).length -
+  //           (userA.questions.length + Object.keys(userA.answers).length)
+  //         );
+  //       });
+  //     dispatch(receiveUsers(users));
+  //   };
+  //   fetchUsers();
+  // }, [dispatch]);
 
   const columns = [
     {
@@ -80,11 +81,13 @@ const Leaderboard = () => {
   return (
     <Table
       columns={columns}
-      dataSource={users}
+      dataSource={props.users}
       rowKey="id"
       pagination={false}
     />
   );
 };
 
-export default Leaderboard;
+const mapStateToProps = (state) => ({ users: state.users.users || [] });
+
+export default connect(mapStateToProps)(Leaderboard);
