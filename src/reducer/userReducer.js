@@ -2,6 +2,7 @@ import {
   ADD_USER,
   RECEIVE_USERS,
   UPDATE_USER_ANSWERS,
+  UPDATE_USER_POLLS,
 } from "../utils/constants";
 
 const initialState = {
@@ -23,21 +24,29 @@ const userReducer = (state = initialState, action) => {
           [action.user.id]: action.user,
         },
       };
-    case UPDATE_USER_ANSWERS:
-      const { userId, questionId, answer } = action;
+    case UPDATE_USER_POLLS:
+      const { userId, questionId } = action.payload;
+      const user = state.users.find((u) => u.id === userId);
+      console.log("🚀 ~ userReducer ~ user:", user);
+      user.questions.push(questionId);
       return {
         ...state,
-        users: {
-          ...state.users,
-          [userId]: {
-            ...state.users[userId],
-            answers: {
-              ...state.users[userId].answers,
-              [questionId]: answer,
-            },
-          },
-        },
       };
+    // case UPDATE_USER_ANSWERS:
+    //   const { userId, questionId, answer } = action;
+    //   return {
+    //     ...state,
+    //     users: {
+    //       ...state.users,
+    //       [userId]: {
+    //         ...state.users[userId],
+    //         answers: {
+    //           ...state.users[userId].answers,
+    //           [questionId]: answer,
+    //         },
+    //       },
+    //     },
+    //   };
     default:
       return state;
   }

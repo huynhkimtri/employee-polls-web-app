@@ -2,8 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { addPoll } from "../actions/poll";
 import { Button, Col, Form, Input, message, Row } from "antd";
 import { useState } from "react";
-import { _saveQuestion } from "../utils/_DATA";
 import { useNavigate } from "react-router-dom";
+import { updateUserPolls } from "../actions/user";
+import { saveQuestion } from "../utils/API";
 
 const PollForm = () => {
   let naviagate = useNavigate();
@@ -20,8 +21,9 @@ const PollForm = () => {
         optionTwoText: values.optionTwo,
         author: currentUser.id,
       };
-      const data = await _saveQuestion(newPoll);
+      const data = await saveQuestion(newPoll);
       dispatch(addPoll(data));
+      dispatch(updateUserPolls(currentUser.id, data.id));
       message.success("Poll created successfully!");
       naviagate("/");
     } catch (error) {
