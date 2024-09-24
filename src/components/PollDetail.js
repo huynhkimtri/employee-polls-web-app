@@ -28,7 +28,6 @@ const PollDetail = () => {
 
         // if current voted -> show the info
         if (userVote) {
-          console.log("🚀 ~ fetchPollDetail ~ userVote:", userVote);
           const { percentageOptionOne, percentageOptionTwo } =
             formatPercentVoteOption(poll);
 

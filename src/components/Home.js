@@ -64,7 +64,7 @@ const mapStateToProps = (state) => ({
   polls: Object.keys(state.polls.polls || {})
     .map((qId) => state.polls.polls[qId])
     .sort((a, b) => b.timestamp - a.timestamp),
-  curentUserId: state.auth.currentUser.id,
+  curentUserId: state.auth.currentUser?.id,
 });
 
 export default connect(mapStateToProps)(Home);

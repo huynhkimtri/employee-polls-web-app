@@ -1,15 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../actions/auth";
 import { Avatar, Button, Menu } from "antd";
 import { Header } from "antd/es/layout/layout";
 
 const NavBar = () => {
+  let naviagate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth.currentUser);
 
   const handleLogout = () => {
     dispatch(logout());
+    naviagate("/login");
   };
 
   const items = [
