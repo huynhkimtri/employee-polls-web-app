@@ -123,7 +123,11 @@ const PollDetail = () => {
         <div>
           {poll.userVote && (
             <Alert
-              message="Thanks for your opinion!"
+              message={`You have chosen "${
+                poll.userVote === OPT_ONE
+                  ? poll.optionOne?.text
+                  : poll.optionTwo?.text
+              }". Thanks for your opinion!`}
               description={
                 <p>
                   {poll.optionOne?.votes.length} employee(s) choses option 1 (~
