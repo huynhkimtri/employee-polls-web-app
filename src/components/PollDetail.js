@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Button, Card, message } from "antd";
 import { OPT_ONE, OPT_TWO } from "../utils/constants";
 import { formatPercentVoteOption } from "../utils/helper";
+import { updateUserAnswers } from "../actions/user";
 
 const PollDetail = () => {
   const dispatch = useDispatch();
@@ -53,6 +54,8 @@ const PollDetail = () => {
     try {
       setPoll({ ...poll, userVote: selectedOption });
       dispatch(votePoll(id, selectedOption, currentUser.id));
+      // Update the user question
+      dispatch(updateUserAnswers(currentUser.id, id, selectedOption));
       message.success("Vote submitted successfully!");
     } catch (error) {
       console.log("🚀 ~ handleVote ~ error:", error);

@@ -5,9 +5,7 @@ export const getInitData = async () => {
   const users = await _getUsers();
   return {
     questions,
-    users: Object.keys(users).map((userId) =>
-      Object.assign({}, users[userId], { passsword: null })
-    ),
+    users
   };
 };
 

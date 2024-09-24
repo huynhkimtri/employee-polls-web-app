@@ -22,7 +22,9 @@ const PollForm = () => {
         author: currentUser.id,
       };
       const data = await saveQuestion(newPoll);
+      // Add new poll to state
       dispatch(addPoll(data));
+      // Update the user poll
       dispatch(updateUserPolls(currentUser.id, data.id));
       message.success("Poll created successfully!");
       naviagate("/");

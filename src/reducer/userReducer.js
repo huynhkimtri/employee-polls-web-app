@@ -26,27 +26,27 @@ const userReducer = (state = initialState, action) => {
       };
     case UPDATE_USER_POLLS:
       const { userId, questionId } = action.payload;
-      const user = state.users.find((u) => u.id === userId);
+      const user = state.users[userId];
       console.log("🚀 ~ userReducer ~ user:", user);
       user.questions.push(questionId);
       return {
         ...state,
       };
-    // case UPDATE_USER_ANSWERS:
-    //   const { userId, questionId, answer } = action;
-    //   return {
-    //     ...state,
-    //     users: {
-    //       ...state.users,
-    //       [userId]: {
-    //         ...state.users[userId],
-    //         answers: {
-    //           ...state.users[userId].answers,
-    //           [questionId]: answer,
-    //         },
-    //       },
-    //     },
-    //   };
+    case UPDATE_USER_ANSWERS:
+      const currentUser = state.users[action.payload.userId];
+      return {
+        ...state,
+        users: {
+          ...state.users,
+          [action.payload.userId]: {
+            ...currentUser,
+            answers: {
+              ...currentUser.answers,
+              [action.payload.questionId]: action.payload.answer,
+            },
+          },
+        },
+      };
     default:
       return state;
   }

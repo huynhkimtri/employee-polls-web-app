@@ -22,7 +22,9 @@ export const updateUserPolls = (userId, questionId) => ({
 
 export const updateUserAnswers = (userId, questionId, answer) => ({
   type: UPDATE_USER_ANSWERS,
-  userId,
-  questionId,
-  answer,
+  payload: {
+    userId,
+    questionId,
+    answer
+  },
 });
