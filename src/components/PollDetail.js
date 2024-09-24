@@ -18,6 +18,7 @@ const PollDetail = () => {
 
   useEffect(() => {
     const fetchPollDetail = async () => {
+      setLoading(true);
       const poll = polls[id];
       if (poll) {
         const userVote = poll.optionOne.votes.includes(currentUser.id)
@@ -49,12 +50,13 @@ const PollDetail = () => {
       } else {
         message.error("Failed to load poll. Please try again.");
       }
+      setLoading(false);
     };
 
     fetchPollDetail();
   }, [currentUser.id, id, polls, users]);
 
-  const handleVote = (selectedOption) => {
+  const handleVote = async (selectedOption) => {
     setLoading(true);
     try {
       setPoll({ ...poll, userVote: selectedOption });

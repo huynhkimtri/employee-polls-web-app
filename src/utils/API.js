@@ -16,7 +16,7 @@ export const getInitData = async () => {
 
 export const saveQuestion = async (question) => _saveQuestion(question);
 
-export const saveQuestionAnswer = async ({ authedUser, qid, answer }) =>
+export const saveQuestionAnswer = async (authedUser, qid, answer) =>
   _saveQuestionAnswer({ authedUser, qid, answer });
 
 export const loginWithUsernamePassword = async (username, passsword) => {
