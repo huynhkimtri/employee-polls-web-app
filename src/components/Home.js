@@ -41,11 +41,11 @@ const Home = (props) => {
             <List.Item.Meta
               avatar={
                 <Avatar
-                  src={`https://api.dicebear.com/7.x/miniavs/svg?seed=1`}
+                  src={poll.authorAvatarUrl}
                   style={{ backgroundColor: "#1677ff" }}
                 />
               }
-              title={`Would you rather ${poll.optionOne.text} vs ${poll.optionTwo.text}`}
+              title={`Would you rather ${poll.optionOne.text} or ${poll.optionTwo.text}`}
               description={`@${poll.author} creates on ${formatDate(
                 poll.timestamp
               )}`}
@@ -63,6 +63,12 @@ const Home = (props) => {
 const mapStateToProps = (state) => ({
   polls: Object.keys(state.polls.polls || {})
     .map((qId) => state.polls.polls[qId])
+    .map((q) => {
+      return {
+        ...q,
+        authorAvatarUrl: state.users.users[q.author].avatarURL,
+      };
+    })
     .sort((a, b) => b.timestamp - a.timestamp),
   curentUserId: state.auth.currentUser?.id,
 });
