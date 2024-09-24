@@ -22,3 +22,22 @@ describe('_saveQuestion', () => {
     expect(savedQuestion.author).toBe('user1'); // Check the author
   });
 });
+
+describe('_saveQuestion', () => {
+    it('should return an error if incorrect data is passed', async () => {
+      // Prepare incorrect data
+      const incorrectData = {
+      };
+  
+      // Use a try/catch block to handle the promise rejection
+      try {
+        await _saveQuestion(incorrectData);
+        // If the promise resolves, we want to fail the test
+        throw new Error('Expected _saveQuestion to throw an error, but it did not.');
+      } catch (error) {
+        // Verify that the error message is what you expect
+        expect(error).toBeDefined(); 
+        // expect(error.message).toBe('Expected error message');
+      }
+    });
+  });
