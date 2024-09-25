@@ -25,7 +25,7 @@ To install and run the project, follow these steps:
 5. Open your browser - navigate to http://localhost:3000 to view the application.
 
 ## Usage
-1. Log in using one of the existing users. 
+1. Log in using one of the existing users. (Ex: username: admin & password: admin)
 2. Create new polls or vote on existing ones.
 3. Navigate to the leaderboard to see your ranking.
 
