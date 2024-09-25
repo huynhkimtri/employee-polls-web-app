@@ -26,7 +26,6 @@ describe("PollForm Snapshot Test", () => {
   beforeEach(() => {
     store = mockStore({
       auth: { currentUser: { id: "user1" } },
-      // Add other initial state if needed
     });
 
     mockNavigate = jest.fn();
@@ -53,7 +52,6 @@ describe("PollForm Submission", () => {
   beforeEach(() => {
     store = mockStore({
       auth: { currentUser: { id: "user1" } },
-      // Add other initial state if needed
     });
 
     mockNavigate = jest.fn();
@@ -109,7 +107,6 @@ describe("PollForm Submission failed", () => {
   beforeEach(() => {
     store = mockStore({
       auth: { currentUser: { id: "user1" } },
-      // Add other initial state if needed
     });
 
     mockNavigate = jest.fn();
