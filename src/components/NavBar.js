@@ -62,7 +62,7 @@ const NavBar = () => {
         <Avatar
           src={currentUser.avatarURL}
           style={{
-            backgroundColor: "#87d068",
+            backgroundColor: "#1677ff",
           }}
         />
         <Button
