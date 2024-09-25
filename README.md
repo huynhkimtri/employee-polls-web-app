@@ -33,6 +33,12 @@ To install and run the project, follow these steps:
 To run the unit tests, use the following command:
 `npm test`
 
+## Issues:
+Some are experiencing issues with running tests using Ant Design
+- https://github.com/ant-design/ant-design/issues/21096
+- https://github.com/ant-design/ant-design/issues/27658
+
+
 ## Contributing
 If you'd like to contribute to the project, feel free to fork the repository and submit a pull request.
 
