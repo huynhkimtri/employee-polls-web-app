@@ -1,4 +1,4 @@
-import { _saveQuestion } from "../utils/_DATA"; // Adjust the import based on your file structure
+import { _saveQuestion, _saveQuestionAnswer } from "../utils/_DATA"; // Adjust the import based on your file structure
 
 describe("_saveQuestion", () => {
   it("should return the saved question with all expected fields populated", async () => {
@@ -118,5 +118,51 @@ describe("_saveQuestion", () => {
     expect(result.optionOne.text).toBe(validQuestion.optionOneText);
     expect(result.optionTwo.text).toBe(validQuestion.optionTwoText);
     expect(result.author).toBe(validQuestion.author);
+  });
+});
+
+describe("_saveQuestionAnswer", () => {
+  it("should return an error if authedUser is missing", async () => {
+    const invalidData = {
+      qid: "question1",
+      answer: "optionOne",
+    };
+
+    await expect(_saveQuestionAnswer(invalidData)).rejects.toEqual(
+      "Please provide authedUser, qid, and answer"
+    );
+  });
+
+  it("should return an error if qid is missing", async () => {
+    const invalidData = {
+      authedUser: "user1",
+      answer: "optionOne",
+    };
+
+    await expect(_saveQuestionAnswer(invalidData)).rejects.toEqual(
+      "Please provide authedUser, qid, and answer"
+    );
+  });
+
+  it("should return an error if answer is missing", async () => {
+    const invalidData = {
+      authedUser: "user1",
+      qid: "question1",
+    };
+
+    await expect(_saveQuestionAnswer(invalidData)).rejects.toEqual(
+      "Please provide authedUser, qid, and answer"
+    );
+  });
+
+  it("should save the answer if correct data is passed", async () => {
+    const validData = {
+      authedUser: "admin",
+      qid: "am8ehyc8byjqgar0jgpub9",
+      answer: "optionOne",
+    };
+
+    const result = await _saveQuestionAnswer(validData);
+    expect(result).toBe(true);
   });
 });

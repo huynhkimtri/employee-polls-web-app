@@ -205,7 +205,7 @@ export function _saveQuestionAnswer({ authedUser, qid, answer }) {
         [authedUser]: {
           ...users[authedUser],
           answers: {
-            ...users[authedUser].answers,
+            ...users[authedUser]?.answers,
             [qid]: answer,
           },
         },
@@ -216,8 +216,7 @@ export function _saveQuestionAnswer({ authedUser, qid, answer }) {
         [qid]: {
           ...questions[qid],
           [answer]: {
-            ...questions[qid][answer],
-            votes: questions[qid][answer].votes.concat([authedUser]),
+            votes: [authedUser],
           },
         },
       };
