@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { login, loginError } from "../actions/auth";
 import { useEffect, useState } from "react";
 import { loginWithUsernamePassword } from "../utils/API";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Alert, Button, Checkbox, Form, Input, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { handleInitialData } from "../actions/shared";
@@ -14,7 +14,9 @@ const Login = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-  let naviagate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  let navigate = useNavigate();
 
   const handleLogin = async (values) => {
     setLoading(true);
@@ -27,7 +29,7 @@ const Login = () => {
       dispatch(login(user));
       dispatch(handleInitialData(user.id));
       // Redirect to home or desired page after login
-      naviagate("/");
+      navigate(from, { replace: true });
     } else {
       const errorMessage = "Invalid username or password";
       dispatch(loginError(errorMessage));
