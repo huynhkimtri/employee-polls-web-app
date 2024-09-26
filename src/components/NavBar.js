@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../actions/auth";
 import { Avatar, Button, Menu } from "antd";
 import { Header } from "antd/es/layout/layout";
@@ -8,6 +8,7 @@ const NavBar = () => {
   let naviagate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth.currentUser);
+  const location = useLocation();
 
   const handleLogout = () => {
     dispatch(logout());
@@ -16,15 +17,15 @@ const NavBar = () => {
 
   const items = [
     {
-      key: "home",
+      key: "/",
       label: <Link to="/">Home</Link>,
     },
     {
-      key: "leaderboard",
+      key: "/leaderboard",
       label: <Link to="/leaderboard">Leaderboard</Link>,
     },
     {
-      key: "add",
+      key: "/add",
       label: <Link to="/add">New question</Link>,
     },
   ];
@@ -46,7 +47,7 @@ const NavBar = () => {
       <Menu
         theme="dark"
         mode="horizontal"
-        defaultSelectedKeys={["home"]}
+        defaultSelectedKeys={[location.pathname]}
         items={items}
         style={{ flex: 1, minWidth: 0 }}
       />
