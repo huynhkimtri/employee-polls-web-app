@@ -7,11 +7,13 @@ import PollForm from "./components/PollForm";
 import PollDetail from "./components/PollDetail";
 import Login from "./components/Login";
 import Home from "./components/Home";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="*" element={<NotFoundPage />} />
       <Route path="/" element={<PrivateRoute />}>
         <Route element={<MainPage />}>
           <Route index element={<Home />} />
