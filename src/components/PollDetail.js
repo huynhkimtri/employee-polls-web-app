@@ -1,65 +1,37 @@
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { votePoll } from "../actions/poll";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Alert, Button, Col, Flex, message, Row } from "antd";
 import { OPT_ONE, OPT_TWO } from "../utils/constants";
 import { formatPercentVoteOption } from "../utils/helper";
 import { updateUserAnswers } from "../actions/user";
+import NotFoundPage from "../pages/NotFoundPage";
 
-const PollDetail = () => {
+const PollDetail = (props) => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [poll, setPoll] = useState({});
   const [loading, setLoading] = useState(false);
-  const currentUser = useSelector((state) => state.auth.currentUser);
-  const polls = useSelector((state) => state.polls.polls);
-  const users = useSelector((state) => state.users.users);
 
-  useEffect(() => {
-    const fetchPollDetail = async () => {
-      setLoading(true);
-      const poll = polls[id];
-      if (poll) {
-        const userVote = poll.optionOne.votes.includes(currentUser.id)
-          ? OPT_ONE
-          : poll.optionTwo.votes.includes(currentUser.id)
-          ? OPT_TWO
-          : undefined;
+  const currentUser = props.currentUser;
+  const polls = props.polls.polls;
+  const users = props.users.users;
 
-        const pollDetail = {
-          ...poll,
-          authorAvatarUrl: users[poll.author].avatarURL,
-          authorName: users[poll.author].name,
-        };
+  if (!polls[id]) {
+    return <NotFoundPage />;
+  }
 
-        // if current voted -> show the info
-        if (userVote) {
-          const { percentageOptionOne, percentageOptionTwo } =
-            formatPercentVoteOption(poll);
-
-          setPoll({
-            ...pollDetail,
-            percentageOptionOne,
-            percentageOptionTwo,
-            userVote,
-          });
-        } else {
-          setPoll(pollDetail);
-        }
-      } else {
-        message.error("Failed to load poll. Please try again.");
-      }
-      setLoading(false);
-    };
-
-    fetchPollDetail();
-  }, [currentUser.id, id, polls, users]);
+  const poll = polls[id];
+  const author = users[poll.author];
+  const userVote = poll.optionOne.votes.includes(currentUser.id)
+    ? OPT_ONE
+    : poll.optionTwo.votes.includes(currentUser.id)
+    ? OPT_TWO
+    : undefined;
 
   const handleVote = async (selectedOption) => {
     setLoading(true);
     try {
-      setPoll({ ...poll, userVote: selectedOption });
       dispatch(votePoll(id, selectedOption, currentUser.id));
       // Update the user question
       dispatch(updateUserAnswers(currentUser.id, id, selectedOption));
@@ -81,10 +53,10 @@ const PollDetail = () => {
             marginBottom: "24px",
           }}
         >
-          <h3>Poll by {poll.authorName}</h3>
+          <h3>Poll by {author.name}</h3>
           <img
-            src={poll.authorAvatarUrl}
-            alt={poll.author}
+            src={author.avatarURL}
+            alt={author.name}
             style={{
               borderRadius: "50%",
               border: "1px solid transparent",
@@ -105,17 +77,22 @@ const PollDetail = () => {
             type="primary"
             onClick={() => handleVote(OPT_ONE)}
             loading={loading}
-            disabled={!!poll.userVote}
+            disabled={!!userVote}
             size="large"
-            style={{ height: "50px", width: "300px", textWrap: "wrap" }}
+            style={{
+              height: "50px",
+              width: "300px",
+              textWrap: "wrap",
+            }}
           >
             {poll.optionOne?.text}
           </Button>
+
           <Button
             type="primary"
             onClick={() => handleVote(OPT_TWO)}
             loading={loading}
-            disabled={!!poll.userVote}
+            disabled={!!userVote}
             size="large"
             style={{ height: "50px", width: "300px", textWrap: "wrap" }}
           >
@@ -123,10 +100,10 @@ const PollDetail = () => {
           </Button>
         </Flex>
         <div>
-          {poll.userVote && (
+          {userVote && (
             <Alert
               message={`You have chosen "${
-                poll.userVote === OPT_ONE
+                userVote === OPT_ONE
                   ? poll.optionOne?.text
                   : poll.optionTwo?.text
               }". Thanks for your opinion!`}
@@ -134,12 +111,12 @@ const PollDetail = () => {
                 <p>
                   {poll.optionOne?.votes.length} employee(s) choses option 1 (~
                   {formatPercentVoteOption(poll).percentageOptionOne?.toFixed(
-                    2
+                    0
                   )}
                   %), while {poll.optionTwo?.votes.length} employee(s) choses
                   option 2 (~
                   {formatPercentVoteOption(poll).percentageOptionTwo?.toFixed(
-                    2
+                    0
                   )}
                   %).
                 </p>
@@ -154,9 +131,10 @@ const PollDetail = () => {
   );
 };
 
-const mapStateToProps = ({ currentUser, polls, users }) => ({
-  currentUser,
+const mapStateToProps = ({ auth, polls, users }) => ({
+  currentUser: auth.currentUser,
   polls,
   users,
 });
+
 export default connect(mapStateToProps)(PollDetail);

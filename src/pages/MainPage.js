@@ -2,6 +2,7 @@ import { Content } from "antd/es/layout/layout";
 import NavBar from "../components/NavBar";
 import { Col, Layout, Row, theme } from "antd";
 import { Outlet } from "react-router-dom";
+import { LoadingBar } from "react-redux-loading-bar";
 
 const MainPage = () => {
   const {
@@ -14,6 +15,7 @@ const MainPage = () => {
       <Content
         style={{ padding: "0 48px", marginTop: "16px", marginBottom: "48px" }}
       >
+        <LoadingBar />
         <Row justify={"center"}>
           <Col
             span={18}

@@ -5,7 +5,6 @@ import { loginWithUsernamePassword } from "../utils/API";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Alert, Button, Checkbox, Form, Input, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { handleInitialData } from "../actions/shared";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -27,7 +26,7 @@ const Login = () => {
     );
     if (user) {
       dispatch(login(user));
-      dispatch(handleInitialData(user.id));
+      // dispatch(handleInitialData(user.id));
       // Redirect to home or desired page after login
       navigate(from, { replace: true });
     } else {

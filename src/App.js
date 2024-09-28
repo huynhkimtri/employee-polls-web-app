@@ -8,8 +8,16 @@ import PollDetail from "./components/PollDetail";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import NotFoundPage from "./pages/NotFoundPage";
+import { useEffect } from "react";
+import { handleInitialData } from "./actions/shared";
+import { connect } from "react-redux";
 
-function App() {
+export const App = (props) => {
+  useEffect(() => {
+    props.dispatch(handleInitialData());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
@@ -24,6 +32,13 @@ function App() {
       </Route>
     </Routes>
   );
-}
+};
 
-export default App;
+const mapStateToProps = ({ users, polls, auth, loadingBar }) => ({
+  users,
+  polls,
+  auth,
+  loadingBar,
+});
+
+export default connect(mapStateToProps)(App);
