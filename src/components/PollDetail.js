@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { votePoll } from "../actions/poll";
 import { useEffect, useState } from "react";
@@ -154,4 +154,9 @@ const PollDetail = () => {
   );
 };
 
-export default PollDetail;
+const mapStateToProps = ({ currentUser, polls, users }) => ({
+  currentUser,
+  polls,
+  users,
+});
+export default connect(mapStateToProps)(PollDetail);
